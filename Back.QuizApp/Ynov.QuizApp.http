@@ -1,0 +1,14 @@
+@Ynov.QuizApp_HostAddress = http://localhost:5000
+
+# Get quiz
+GET {{Ynov.QuizApp_HostAddress}}/quiz
+{ "body": "test" }
+###
+
+GET {{Ynov.QuizApp_HostAddress}}/quiz/<id>
+### 
+
+
+GET {{Ynov.QuizApp_HostAddress}}/quiz/<id>/questions 
+
+
