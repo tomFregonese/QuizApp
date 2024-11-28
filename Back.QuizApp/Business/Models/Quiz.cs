@@ -12,7 +12,7 @@ public class Quiz {
     
     public DateTime CreationDate { get; set; }
     
-    public Category Category { get; set; }
+    public Guid CategoryId { get; set; }
     
     public IEnumerable<Question> Questions { get; set; }
     

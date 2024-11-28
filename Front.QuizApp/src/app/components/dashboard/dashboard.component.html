@@ -1,0 +1,10 @@
+@for (categoryId of quizzesFilteredByCategory.keys(); track categoryId) {
+    <ul>
+        <H3>{{quizService.getCategoryNameById(categoryId)}}</H3>
+        @for(quiz of quizzesFilteredByCategory.get(categoryId); track quiz.id) {
+            <li>
+                <app-quiz-card [quiz]="quiz" />
+            </li>
+        }
+    </ul>
+}

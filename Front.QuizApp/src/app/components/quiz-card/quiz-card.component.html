@@ -1,0 +1,9 @@
+<div class="container">
+    <a [routerLink]="['/quizzes/', quiz.id]" (click)="onQuizClicked(quiz.id)">
+        {{ quiz.name }}
+        ( @for (i of Array(quiz.difficulty); track i) {🌶} )
+        — Published on: {{quiz.creationDate.toLocaleDateString()}}
+    </a>
+
+</div>
+

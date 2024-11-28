@@ -5,11 +5,11 @@ using Ynov.QuizApp.Controllers.Mappers;
 
 namespace Ynov.QuizApp.Controllers {
     
-    [Route("/v1/quizzes")]
+    [Route("/v1/")]
     [ApiController]
     public class QuizController(IQuizService _service, QuizMapper _mapper) : ControllerBase {
         
-        [HttpGet(Name = "GetAllQuiz")]
+        [HttpGet("all-quizzes", Name = "GetAllQuiz")]
         [ProducesResponseType(typeof(IEnumerable<QuizDTO>), StatusCodes.Status200OK)]
         public IActionResult GetAll() {
             IEnumerable<QuizDTO> dtos = _service.GetAll().Select(quiz => _mapper.ToDto(quiz));
@@ -17,7 +17,7 @@ namespace Ynov.QuizApp.Controllers {
         }
 
 
-        [HttpGet("{id}", Name = "GetAQuiz")]
+        [HttpGet("quiz/{id}", Name = "GetAQuiz")]
         [ProducesResponseType(typeof(QuizDTO), StatusCodes.Status200OK)]
         public IActionResult GetQuiz(Guid id) {
             Quiz? quiz = _service.GetQuizById(id);
