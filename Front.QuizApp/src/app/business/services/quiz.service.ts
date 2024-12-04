@@ -4,17 +4,13 @@ import {HttpClient} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
 import {Quiz} from '../models/quiz.model';
 import {QuizDto} from './dtos/quiz.dto';
+import {environment} from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuizService {
-    private readonly protocol: string = 'http';
-    private readonly host: string = 'localhost';
-    private readonly port: string = '5001';
-    private readonly apiVersion: string = 'v1';
-    private readonly quizApiUrl: string = this.protocol + '://' + this.host + ':' + this.port + '/' +
-                                          this.apiVersion + '/';
+    private readonly quizApiUrl: string = environment.apiUrl;
 
     constructor( private readonly  mapper: QuizMapper,
                private readonly httpClient: HttpClient) {}
@@ -38,7 +34,4 @@ export class QuizService {
         );
     }
 
-    public getCategoryNameById(categoryId: string) {
-        return categoryId; //Todo implement this to get the category name from the category id
-    }
 }

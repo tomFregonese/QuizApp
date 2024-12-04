@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {QuizService} from '../../business/services/quiz.service';
 import {Quiz} from '../../business/models/quiz.model';
-import {RouterLink} from '@angular/router';
-import {map, of, Subscription} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {QuizCardComponent} from '../quiz-card/quiz-card.component';
+import {CategoryService} from '../../business/services/category.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +15,8 @@ import {QuizCardComponent} from '../quiz-card/quiz-card.component';
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit{
-  constructor (protected readonly quizService: QuizService) {}
+  constructor (protected readonly quizService: QuizService,
+               protected readonly categoryService: CategoryService,) {}
 
   private subscription?: Subscription;
 

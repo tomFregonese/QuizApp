@@ -11,12 +11,11 @@ namespace Ynov.QuizApp.Controllers {
         
         [HttpGet("all-quizzes", Name = "GetAllQuiz")]
         [ProducesResponseType(typeof(IEnumerable<QuizDTO>), StatusCodes.Status200OK)]
-        public IActionResult GetAll() {
-            IEnumerable<QuizDTO> dtos = _service.GetAll().Select(quiz => _mapper.ToDto(quiz));
+        public IActionResult GetAllQuizzes() {
+            IEnumerable<QuizDTO> dtos = _service.GetAllQuizzes().Select(quiz => _mapper.ToDto(quiz));
             return Ok(dtos);
         }
-
-
+        
         [HttpGet("quiz/{id}", Name = "GetAQuiz")]
         [ProducesResponseType(typeof(QuizDTO), StatusCodes.Status200OK)]
         public IActionResult GetQuiz(Guid id) {
