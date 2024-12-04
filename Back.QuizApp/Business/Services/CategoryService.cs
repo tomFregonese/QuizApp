@@ -16,7 +16,6 @@ public class CategoryService : ICategoryService {
     }; 
 
     public IEnumerable<Category> GetAllCategories() {
-        Console.WriteLine("GetAllCategories");
         return _categories;
     }
     

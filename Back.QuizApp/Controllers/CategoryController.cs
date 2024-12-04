@@ -24,7 +24,6 @@ public class CategoryController(ICategoryService _service, CategoryMapper _mappe
     [HttpGet("fetch-categories/", Name = "FetchCategories")]
     [ProducesResponseType(typeof(IEnumerable<CategoryDTO>), StatusCodes.Status200OK)]
     public IActionResult FetchCategories(Guid categoryId) {
-        Console.WriteLine("Tes morts");
         IEnumerable<CategoryDTO> dtos = _service.GetAllCategories().Select(category => _mapper.ToDto(category));
         
         return Ok(dtos);

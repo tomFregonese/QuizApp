@@ -25,7 +25,6 @@ public class QuizService : IQuizService {
     };
 
     public IEnumerable<Quiz> GetAllQuizzes() {
-        Console.WriteLine("GetAllQuizzes");
         return _quizzes;
     }
 
