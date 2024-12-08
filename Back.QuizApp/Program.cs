@@ -10,11 +10,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<CategoryMapper>();
+
 builder.Services.AddScoped <IQuizService, QuizService>();
 builder.Services.AddScoped<QuizMapper>();
 
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<CategoryMapper>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<QuestionMapper>();
+builder.Services.AddScoped<AnswerMapper>();
 
 var app = builder.Build();
 

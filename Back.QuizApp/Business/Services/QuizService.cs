@@ -12,7 +12,6 @@ public class QuizService : IQuizService {
             Description = "ASP.NET Core Web API",
             Difficulty = 3,
             CreationDate = new DateTime(2024, 11, 25, 11, 23, 34),
-            Questions = new List<Question> { },
         }, new Quiz {
             Id = new Guid("ca655c54-0d8b-4ff1-9363-46f269bc5f72"),
             Name = "Dev FullStack M2",
@@ -20,7 +19,6 @@ public class QuizService : IQuizService {
             Description = "ASP.NET Core Web API",
             Difficulty = 3,
             CreationDate = new DateTime(2024, 11, 25, 11, 23, 34),
-            Questions = new List<Question> { },
         }
     };
 

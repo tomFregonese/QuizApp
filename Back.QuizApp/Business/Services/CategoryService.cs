@@ -19,8 +19,4 @@ public class CategoryService : ICategoryService {
         return _categories;
     }
     
-    public Category? GetCategoryById(Guid id) {
-        return _categories.FirstOrDefault(c => c.Id == id);  
-    }
-
 }
