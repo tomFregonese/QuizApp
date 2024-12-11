@@ -17,7 +17,7 @@ public class QuestionController(IQuestionService _service,
         IEnumerable<QuestionDTO> questions = _service.GetQuestionsByQuizId(QuizId)
             .Select(question => _questionMapper.ToDto(question));
         
-        if (questions == null) {
+        if (!questions.Any()) {
             return NotFound();
         }
         
@@ -30,7 +30,7 @@ public class QuestionController(IQuestionService _service,
     public IActionResult GetAnswersByQuestionId(Guid QuestionId) {
         AnswerDTO dto = _answerMapper.ToDto(_service.GetAnswersByQuestionId(QuestionId));
         
-        if (dto == null) {
+        if (dto.CorrectOptionIndices == null) {
             return NotFound();
         }
         

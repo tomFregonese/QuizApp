@@ -13,15 +13,20 @@ namespace Ynov.QuizApp.Controllers {
         [ProducesResponseType(typeof(IEnumerable<QuizDTO>), StatusCodes.Status200OK)]
         public IActionResult GetAllQuizzes() {
             IEnumerable<QuizDTO> dtos = _service.GetAllQuizzes().Select(quiz => _mapper.ToDto(quiz));
+            
+            if (!dtos.Any()) {
+                return NotFound();
+            }
+            
             return Ok(dtos);
         }
         
         [HttpGet("quiz/{id}", Name = "GetAQuiz")]
         [ProducesResponseType(typeof(QuizDTO), StatusCodes.Status200OK)]
         public IActionResult GetQuiz(Guid id) {
-            Quiz? quiz = _service.GetQuizById(id);
+            Quiz quiz = _service.GetQuizById(id);
             
-            if (quiz == null) {
+            if (quiz.isEmpty()) {
                 return NotFound();
             }
             

@@ -14,6 +14,9 @@ public class Quiz {
     
     public Guid CategoryId { get; set; }
     
-    public IEnumerable<Question> Questions { get; set; }
+    
+    public Boolean isEmpty() {
+        return this.Id == new Guid("00000000-0000-0000-0000-000000000000"); 
+    }
     
 }
