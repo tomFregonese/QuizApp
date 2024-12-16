@@ -1,12 +1,24 @@
 <div class="quiz-details">
-    <div class="quiz-header">
-        <h1>{{ quiz?.name }}</h1>
-        <p class="quiz-category">{{ categoryName }}</p>
-        <button (click)="startQuiz()">Start Quiz</button>
-    </div>
-    <div class="quiz-body">
-        <p class="quiz-description">{{ quiz?.description }}</p>
-        <p class="quiz-difficulty">Difficulté: {{ quiz?.difficulty }}</p>
-        <p class="quiz-date">Publié le: {{ quiz?.creationDate | date:'dd/MM/yyyy' }}</p>
-    </div>
+
+    @if (quizStarted) {
+        <div class="quiz-header">
+            <h1>{{ quiz?.name }}</h1>
+        </div>
+        <div class="quiz-body">
+            <app-quiz-question [question]="currentQuestion"></app-quiz-question>
+            <button (click)="validateQuestion()">Validate</button>
+        </div>
+    } @else {
+        <div class="quiz-header">
+            <h1>{{ quiz?.name }}</h1>
+            <p class="quiz-category">{{ categoryName }}</p>
+        </div>
+        <div class="quiz-body">
+            <p class="quiz-description">{{ quiz?.description }}</p>
+            <p class="quiz-difficulty">Difficulté: {{ quiz?.difficulty }}</p>
+            <p class="quiz-date">Publié le: {{ quiz?.creationDate | date:'dd/MM/yyyy' }}</p>
+            <button (click)="startQuiz()">Start Quiz</button>
+        </div>
+    }
+
 </div>

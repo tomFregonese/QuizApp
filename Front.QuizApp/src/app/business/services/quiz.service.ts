@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {QuizMapper} from './mappers/quiz.mapper';
+import {QuizMapper} from '../mappers/quiz.mapper';
 import {HttpClient} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
 import {Quiz} from '../models/quiz.model';
-import {QuizDto} from './dtos/quiz.dto';
+import {QuizDto} from '../dtos/quiz.dto';
 import {environment} from '../../environment/environment';
 
 @Injectable({
@@ -25,13 +25,25 @@ export class QuizService {
         );
     }
 
-    public getQuizById(id: string): Observable<Quiz> {
-    return this.httpClient.get<QuizDto>(this.quizApiUrl + 'quiz/' + id)
+    public getQuizById(quizId: string): Observable<Quiz> {
+    return this.httpClient.get<QuizDto>(this.quizApiUrl + 'quiz/' + quizId)
         .pipe(
             map((dto: QuizDto) => {
-              return this.mapper.mapQuizFromApiToModel(dto)
+                return this.mapper.mapQuizFromApiToModel(dto)
             }),
         );
     }
 
+    isQuizStarted(quizId: string): Observable<boolean> {
+        return this.httpClient.get<boolean>(this.quizApiUrl + 'is-quiz-started/' + quizId)
+            .pipe(
+                map((started: boolean) => {
+                    return started;
+                })
+            );
+    }
+
+    startQuiz(quizId: string) {
+        return this.httpClient.post(this.quizApiUrl + 'start-quiz/' + quizId, null);
+    }
 }
