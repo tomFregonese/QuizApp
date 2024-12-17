@@ -1,0 +1,11 @@
+@if (user) {
+    <div class="user-header">
+        <span>Welcome, {{ user.firstName }} {{ user.lastName }} :)</span>
+        <button (click)="logout()">Logout</button>
+    </div>
+} @else {
+    <div class="user-header">
+        <span>Welcome, stranger :(</span>
+        <button (click)="navigateToLogin()">Login</button>
+    </div>
+}

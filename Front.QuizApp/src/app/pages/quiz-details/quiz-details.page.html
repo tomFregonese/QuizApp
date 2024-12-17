@@ -1,14 +1,16 @@
-<div class="quiz-details">
-
-    @if (quizStarted) {
+@if (quizStarted) {
+    <div class="quiz-details">
         <div class="quiz-header">
             <h1>{{ quiz?.name }}</h1>
         </div>
         <div class="quiz-body">
-            <app-quiz-question [question]="currentQuestion"></app-quiz-question>
+            <!--<app-quiz-question [question]="currentQuestion"></app-quiz-question>-->
             <button (click)="validateQuestion()">Validate</button>
         </div>
-    } @else {
+    </div>
+} @else {
+    <app-user-header/>
+    <div class="quiz-details">
         <div class="quiz-header">
             <h1>{{ quiz?.name }}</h1>
             <p class="quiz-category">{{ categoryName }}</p>
@@ -19,6 +21,5 @@
             <p class="quiz-date">Publié le: {{ quiz?.creationDate | date:'dd/MM/yyyy' }}</p>
             <button (click)="startQuiz()">Start Quiz</button>
         </div>
-    }
-
-</div>
+    </div>
+}
