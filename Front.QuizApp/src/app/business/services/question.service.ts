@@ -10,14 +10,14 @@ import {QuestionDto} from '../dtos/question.dto';
   providedIn: 'root'
 })
 export class QuestionService {
-    private readonly quizApiUrl: string = environment.apiUrl;
+    private readonly questionApiUrl: string = environment.apiUrl;
 
     constructor(private readonly questionMapper: QuestionMapper,
                 private readonly answerMapper: AnswerMapper,
                 private readonly httpClient: HttpClient) {}
 
     getQuestionByQuizId(quizId: string):Observable<Question[]> {
-        return this.httpClient.get<QuestionDto[]>(this.quizApiUrl + 'questions/' + quizId)
+        return this.httpClient.get<QuestionDto[]>(this.questionApiUrl + 'questions/' + quizId)
             .pipe(
                 map((dtos: QuestionDto[]) => {
                     return dtos.map((dto: QuestionDto) => this.questionMapper.mapQuestionFromApiToModel(dto));

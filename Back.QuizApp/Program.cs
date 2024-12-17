@@ -20,6 +20,9 @@ builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<QuestionMapper>();
 builder.Services.AddScoped<AnswerMapper>();
 
+builder.Services.AddScoped <IUserService, UserService>();
+builder.Services.AddScoped<UserMapper>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
