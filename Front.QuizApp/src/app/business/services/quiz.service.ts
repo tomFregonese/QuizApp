@@ -34,8 +34,8 @@ export class QuizService {
         );
     }
 
-    isQuizStarted(quizId: string): Observable<boolean> {
-        return this.httpClient.get<boolean>(this.quizApiUrl + 'is-quiz-started/' + quizId)
+    isQuizStarted(userId :string, quizId: string): Observable<boolean> {
+        return this.httpClient.get<boolean>(this.quizApiUrl + `is-quiz-started/${userId}/${quizId}/`)
             .pipe(
                 map((started: boolean) => {
                     return started;
@@ -43,7 +43,7 @@ export class QuizService {
             );
     }
 
-    startQuiz(quizId: string) {
-        return this.httpClient.post(this.quizApiUrl + 'start-quiz/' + quizId, null);
+    startQuiz(userId: string, quizId: string) {
+        return this.httpClient.post(this.quizApiUrl + `start-quiz/${userId}/${quizId}`, null);
     }
 }

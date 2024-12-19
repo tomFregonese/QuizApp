@@ -7,7 +7,6 @@ public class QuestionMapper {
     public QuestionDTO ToDto(Question question) {
         return new QuestionDTO() {
             Id = question.Id,
-            QuizId = question.QuizId,
             QuestionContent = question.QuestionContent,
             Options = question.Options
         }; 

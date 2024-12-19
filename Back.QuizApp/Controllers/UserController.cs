@@ -21,6 +21,13 @@ namespace Ynov.QuizApp.Controllers {
             UserDTO userDto = _mapper.ToDto(user);
             return Ok(userDto);
         }
+        
+        [HttpGet("is-a-quiz-in-progress-for-this-user/{userId}", Name = "DoesThisUserHaveAQuizInProgress")]
+        [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
+        public IActionResult DoesThisUserHaveAQuizInProgress(Guid userId) {
+            Boolean hasQuizInProgress = _service.doesThisUserHaveAQuizInProgress(userId);
+            return Ok(hasQuizInProgress);
+        }
     
     }
     

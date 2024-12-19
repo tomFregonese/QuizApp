@@ -23,6 +23,8 @@ builder.Services.AddScoped<AnswerMapper>();
 builder.Services.AddScoped <IUserService, UserService>();
 builder.Services.AddScoped<UserMapper>();
 
+builder.Services.AddScoped <IUserQuizProgressService, UserQuizProgressService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

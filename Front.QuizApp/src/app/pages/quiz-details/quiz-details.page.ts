@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {QuizService} from '../../business/services/quiz.service';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {Quiz} from '../../business/models/quiz.model';
 import {DatePipe} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -37,13 +37,17 @@ export class QuizDetailsPage implements OnInit{
     protected categoryName: string = '';
     protected quizStarted: boolean = false;
     protected questions: Question[] = [];
+    private userId: string = '';
 
     ngOnInit() {
         const quizId = this.route.snapshot.paramMap.get('id');
         this.subscriptions.add(
-            this.quizService.isQuizStarted(quizId!).subscribe((started: boolean) => {
-                this.quizStarted = started;
-            })
+            this.userService.getUserId().subscribe((userId: string) =>{
+                this.userId = userId;
+                this.quizService.isQuizStarted(userId, quizId!).subscribe((started: boolean) => {
+                    this.quizStarted = started;
+                })
+            } )
         );
         this.subscriptions.add(
             this.quizService.getQuizById(quizId!).subscribe((quiz: Quiz) => {
@@ -63,7 +67,7 @@ export class QuizDetailsPage implements OnInit{
             return;
         }
         this.subscriptions.add(
-            this.quizService.startQuiz(this.quiz.id).subscribe(() => {
+            this.quizService.startQuiz(this.userId, this.quiz.id).subscribe(() => {
                 this.quizStarted = true;
             })
         );

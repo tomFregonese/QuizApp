@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map, Observable} from 'rxjs';
+import {BehaviorSubject, map, Observable, of} from 'rxjs';
 import {environment} from '../../environment/environment';
 import {User} from '../models/user.model';
 import {UserDto} from '../dtos/user.dto';
@@ -11,6 +11,7 @@ import {UserMapper} from '../mappers/user.mapper';
 })
 export class UserService {
     private readonly userApiUrl: string = environment.apiUrl;
+    private userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(JSON.parse(<string>localStorage.getItem('user')));
 
     constructor( private readonly  mapper: UserMapper,
                private readonly httpClient: HttpClient) {}
@@ -30,5 +31,9 @@ export class UserService {
                     return this.mapper.mapUserFromApiToModel(dto)
                 }),
             );
+    }
+
+    getUserId(): Observable<string> {
+        return of(this.userSubject.value.id);
     }
 }
