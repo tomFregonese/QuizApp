@@ -8,7 +8,6 @@ export class QuestionMapper {
     public mapQuestionFromApiToModel(apiQuestion: QuestionDto): Question {
         return {
             id: apiQuestion.id,
-            quizId: apiQuestion.quizId,
             questionContent: apiQuestion.questionContent,
             options: apiQuestion.options,
             correctOptionIndices: []

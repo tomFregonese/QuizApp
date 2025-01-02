@@ -7,4 +7,8 @@ public class Question {
     public List<string> Options { get; set; }
     public List<int> CorrectOptionIndices { get; set; }
     
+    public Boolean isEmpty() {
+        return this.Id == new Guid("00000000-0000-0000-0000-000000000000"); 
+    }
+    
 }

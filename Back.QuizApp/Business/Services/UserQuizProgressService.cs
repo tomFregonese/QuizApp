@@ -69,5 +69,30 @@ public class UserQuizProgressService : IUserQuizProgressService {
         
         return true;
     }
+    
+    public QuestionIndexAndId GetCurrentQuestion(Guid userId, Guid quizId) {
+        usersQuizProgresses = JsonSerializer.Deserialize<List<UserQuizProgress>>(File.ReadAllText(_usersQuizProgressFilePath));
+        if (usersQuizProgresses == null) {
+            return new QuestionIndexAndId();
+        }
+        userQuizProgress = usersQuizProgresses.FirstOrDefault(uqp => uqp.UserId == userId && uqp.QuizId == quizId);
+        
+        if (userQuizProgress == null) {
+            return new QuestionIndexAndId();
+        }
+        
+        quizzes = JsonSerializer.Deserialize<List<Quiz>>(File.ReadAllText(_quizzesFilePath));
+        quiz = quizzes.FirstOrDefault(q => q.Id == quizId);
+        
+        if (userQuizProgress.GivenAnswers.Count >= quiz.QuestionIds.Count) {
+            return new QuestionIndexAndId();
+        }
+        
+        return new QuestionIndexAndId() {
+            QuestionId = quiz.QuestionIds[userQuizProgress.GivenAnswers.Count],
+            TotalNumberOfQuestions = quiz.QuestionIds.Count,
+            CurrentQuestionIndex = userQuizProgress.GivenAnswers.Count
+        };
+    }
 
 }

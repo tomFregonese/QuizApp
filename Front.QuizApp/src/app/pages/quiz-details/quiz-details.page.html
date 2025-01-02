@@ -4,7 +4,7 @@
             <h1>{{ quiz?.name }}</h1>
         </div>
         <div class="quiz-body">
-            <!--<app-quiz-question [question]="currentQuestion"></app-quiz-question>-->
+            <app-quiz-question [question]="question"></app-quiz-question>
             <button (click)="validateQuestion()">Validate</button>
         </div>
     </div>

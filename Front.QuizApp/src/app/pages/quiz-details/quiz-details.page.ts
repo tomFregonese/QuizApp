@@ -36,7 +36,14 @@ export class QuizDetailsPage implements OnInit{
     public quiz!: Quiz;
     protected categoryName: string = '';
     protected quizStarted: boolean = false;
-    protected questions: Question[] = [];
+    protected currentQuestionIndex: number = 0;
+    protected totalNumberOfQuestions: number = 0;
+    protected question: Question = {
+        correctOptionIndices: [],
+        id: '',
+        options: [],
+        questionContent: '',
+    };
     private userId: string = '';
 
     ngOnInit() {
@@ -46,6 +53,7 @@ export class QuizDetailsPage implements OnInit{
                 this.userId = userId;
                 this.quizService.isQuizStarted(userId, quizId!).subscribe((started: boolean) => {
                     this.quizStarted = started;
+                    if (started) this.getQuestion(this.userId, quizId!);
                 })
             } )
         );
@@ -69,14 +77,22 @@ export class QuizDetailsPage implements OnInit{
         this.subscriptions.add(
             this.quizService.startQuiz(this.userId, this.quiz.id).subscribe(() => {
                 this.quizStarted = true;
+                this.getQuestion(this.userId, this.quiz.id);
             })
         );
-        this.subscriptions.add(
-            this.questionService.getQuestionByQuizId(this.quiz.id).subscribe((questions: Question[]) => {
-                this.questions = questions;
-                console.log(this.questions)
-            })
-        );
+    }
+
+
+    getQuestion(userId: string, quizId: string) {
+        this.questionService.getCurrentQuestion(userId, quizId).subscribe((questionIndexAndId) => {
+                this.totalNumberOfQuestions = questionIndexAndId.totalNumberOfQuestions;
+                this.currentQuestionIndex = questionIndexAndId.currentQuestionIndex;
+                this.questionService.getQuestionById(questionIndexAndId.questionId).subscribe((question: Question) => {
+                    this.question = question;
+                    console.log(this.question)
+                });
+            }
+        )
     }
 
     validateQuestion() {

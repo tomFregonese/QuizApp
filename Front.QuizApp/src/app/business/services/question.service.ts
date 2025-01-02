@@ -5,6 +5,9 @@ import {environment} from '../../environment/environment';
 import {AnswerMapper, QuestionMapper} from '../mappers/question.mapper';
 import {Question} from '../models/question.model';
 import {QuestionDto} from '../dtos/question.dto';
+import {QuestionIndexAndId} from '../models/questionIndexAndId.model';
+import {QuestionIndexAndIdDto} from '../dtos/questionIndexAndId.dto';
+import {QuestionIndexAndIdMapper} from '../mappers/questionIndexAndId.mapper';
 
 @Injectable({
   providedIn: 'root'
@@ -12,20 +15,30 @@ import {QuestionDto} from '../dtos/question.dto';
 export class QuestionService {
     private readonly questionApiUrl: string = environment.apiUrl;
 
-    constructor(private readonly questionMapper: QuestionMapper,
+    constructor(private readonly questionIndexAndIdMapper: QuestionIndexAndIdMapper,
+                private readonly questionMapper: QuestionMapper,
                 private readonly answerMapper: AnswerMapper,
                 private readonly httpClient: HttpClient) {}
 
-    getQuestionByQuizId(quizId: string):Observable<Question[]> {
-        return this.httpClient.get<QuestionDto[]>(this.questionApiUrl + 'questions/' + quizId)
+    getCurrentQuestion(userId: string, quizId: string): Observable<QuestionIndexAndId> {
+        return this.httpClient.get<QuestionIndexAndIdDto>(this.questionApiUrl + `get-current-question/${userId}/${quizId}`)
             .pipe(
-                map((dtos: QuestionDto[]) => {
-                    return dtos.map((dto: QuestionDto) => this.questionMapper.mapQuestionFromApiToModel(dto));
-                }),
+                map((dto: QuestionIndexAndIdDto) => {
+                    return this.questionIndexAndIdMapper.mapFromApiToModel(dto)
+                })
             );
     }
 
-    getAnswerByQuestionId(questionId: string) {
+    getQuestionById(questionId: string):Observable<Question> {
+        return this.httpClient.get<QuestionDto>(this.questionApiUrl + 'question/' + questionId)
+            .pipe(
+                map((dto: QuestionDto) => {
+                    return this.questionMapper.mapQuestionFromApiToModel(dto)
+                })
+            );
+    }
+
+    getAnswerByQuestionId(userId: string, questionId: string) {
         //TODO implement this method
     }
 

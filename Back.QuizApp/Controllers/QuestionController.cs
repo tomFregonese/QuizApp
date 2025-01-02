@@ -11,17 +11,18 @@ public class QuestionController(IQuestionService _service,
                                 QuestionMapper _questionMapper, 
                                 AnswerMapper _answerMapper) : ControllerBase  {
         
-    [HttpGet("questions/{QuizId}", Name = "GetQuestionsByQuizId")]
-    [ProducesResponseType(typeof(IEnumerable<QuestionDTO>), StatusCodes.Status200OK)]
-    public IActionResult GetQuestionsByQuizId(Guid QuizId) {
-        IEnumerable<QuestionDTO> questions = _service.GetQuestionsByQuizId(QuizId)
-            .Select(question => _questionMapper.ToDto(question));
+    [HttpGet("question/{QuestionId}", Name = "GetQuestionById")]
+    [ProducesResponseType(typeof(QuestionDTO), StatusCodes.Status200OK)]
+    public IActionResult GetQuestionsByQuizId(Guid QuestionId) {
+        Question question = _service.GetQuestionById(QuestionId);
         
-        if (!questions.Any()) {
+        if (question.isEmpty()) {
             return NotFound();
         }
         
-        return Ok(questions);
+        QuestionDTO dto = _questionMapper.ToDto(question);
+        
+        return Ok(dto);
         
     }
 

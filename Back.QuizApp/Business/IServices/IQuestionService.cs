@@ -4,7 +4,7 @@ namespace Ynov.QuizApp.Controllers;
 
 public interface IQuestionService {
     
-    IEnumerable<Question> GetQuestionsByQuizId(Guid quizId);
+    Question GetQuestionById(Guid questionId);
     Question GetAnswersByQuestionId(Guid questionId);
     
 }

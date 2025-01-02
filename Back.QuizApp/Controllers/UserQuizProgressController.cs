@@ -26,7 +26,12 @@ namespace Ynov.QuizApp.Controllers {
         public IActionResult StartAQuiz(String userId, String quizId) {
             return Ok(_service.StartAQuiz(new Guid(userId), new Guid(quizId)));
         }
-    
+        
+        [HttpGet("get-current-question/{userId}/{quizId}", Name = "GetCurrentQuestion")]
+        [ProducesResponseType(typeof(QuestionIndexAndIdDTO), StatusCodes.Status200OK)]
+        public IActionResult GetCurrentQuestion(String userId, String quizId) {
+            return Ok(_service.GetCurrentQuestion(new Guid(userId), new Guid(quizId)));
+        }
     }
     
 }

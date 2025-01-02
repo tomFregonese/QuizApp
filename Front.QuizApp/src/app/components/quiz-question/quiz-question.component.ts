@@ -12,6 +12,10 @@ export class QuizQuestionComponent {
     @Input() question!: Question;
     constructor() {}
 
+    protected option: string = '';
 
 
+    selectOption(i: number) {
+        // TODO: Implement this method
+    }
 }
