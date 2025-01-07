@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import {map, Observable} from 'rxjs';
 import {Category} from '../models/category.model';
 import {HttpClient} from '@angular/common/http';
-import {CategoryMapper} from './mappers/category.mapper';
+import {CategoryMapper} from '../mappers/category.mapper';
 import {environment} from '../../environment/environment';
-import {CategoryDto} from './dtos/category.dto';
+import {CategoryDto} from '../dtos/category.dto';
 import {StoredCategory} from '../models/storedCategory.model';
 
 @Injectable({

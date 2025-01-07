@@ -9,23 +9,16 @@ namespace Ynov.QuizApp.Controllers;
 [ApiController]
 public class CategoryController(ICategoryService _service, CategoryMapper _mapper) : ControllerBase  {
         
-    [HttpGet("category/{categoryId}", Name = "GetCategoryById")]
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-    public IActionResult GetCategoryById(Guid categoryId) {
-        Category? category = _service.GetCategoryById(categoryId);
+    [HttpGet("fetch-categories/", Name = "FetchCategories")]
+    [ProducesResponseType(typeof(IEnumerable<CategoryDTO>), StatusCodes.Status200OK)]
+    public IActionResult FetchCategories() {
+        IEnumerable<CategoryDTO> dtos = _service.GetAllCategories().Select(category => _mapper.ToDto(category));
         
-        if (category == null) {
+        if (!dtos.Any()) {
             return NotFound();
         }
         
-        return Ok(category);
-    }
-
-    [HttpGet("fetch-categories/", Name = "FetchCategories")]
-    [ProducesResponseType(typeof(IEnumerable<CategoryDTO>), StatusCodes.Status200OK)]
-    public IActionResult FetchCategories(Guid categoryId) {
-        IEnumerable<CategoryDTO> dtos = _service.GetAllCategories().Select(category => _mapper.ToDto(category));
-        
         return Ok(dtos);
     }
+    
 }

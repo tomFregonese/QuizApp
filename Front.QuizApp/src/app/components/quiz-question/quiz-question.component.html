@@ -1,0 +1,7 @@
+<h3>{{question.questionContent}}</h3>
+<div class="options">
+    @for (option of question.options; track option) {
+        <input type="checkbox" [value]="option">
+        <label>{{option}}</label>
+    }
+</div>

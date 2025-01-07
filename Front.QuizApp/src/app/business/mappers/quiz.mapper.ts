@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {QuizDto} from '../dtos/quiz.dto';
-import {Quiz} from '../../models/quiz.model';
+import {Quiz} from '../models/quiz.model';
 
 @Injectable({providedIn: 'root'})
 export class QuizMapper {

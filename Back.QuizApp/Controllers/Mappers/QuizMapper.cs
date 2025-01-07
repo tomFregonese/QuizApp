@@ -11,7 +11,8 @@ public class QuizMapper {
             Difficulty = quiz.Difficulty,
             Name = quiz.Name,
             CategoryId = quiz.CategoryId,
-            CreationDate = quiz.CreationDate
+            CreationDate = quiz.CreationDate,
+            QuestionIds = quiz.QuestionIds
         }; 
     }
 }

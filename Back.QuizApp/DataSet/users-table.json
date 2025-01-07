@@ -1,0 +1,14 @@
+[
+  {
+    "Id": "9b17a0c6-c1a5-4629-8493-1fe1190de8b8", 
+    "FirstName": "Tom",
+    "LastName": "FREGONESE",
+    "Email": "tom.fregonese@ynov.com"
+  },
+  {
+    "Id": "c8afcbad-3cb8-4c20-b799-dcce51e55d47", 
+    "FirstName": "John",
+    "LastName": "DOE",
+    "Email": "john.doe@ynov.com"
+  }
+]
