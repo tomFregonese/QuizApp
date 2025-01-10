@@ -1,0 +1,19 @@
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.option {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px; /* Adjust the width as needed */
+    text-align: center;
+}
+
+.option.selected {
+    background-color: blue;
+    color: white;
+}

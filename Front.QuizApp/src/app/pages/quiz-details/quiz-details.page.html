@@ -3,10 +3,10 @@
         <div class="quiz-header">
             <h1>{{ quiz?.name }}</h1>
         </div>
-        <div class="quiz-body">
-            <app-quiz-question [question]="question"></app-quiz-question>
-            <button (click)="validateQuestion()">Validate</button>
-        </div>
+        <form class="quiz-body">
+            <app-quiz-question [question]="question" (selectedOptionsEmitter)="onSelectionChange($event)" />
+            <button type="submit" (click)="submitAnswer($event)">Validate</button>
+        </form>
     </div>
 } @else {
     <app-user-header/>

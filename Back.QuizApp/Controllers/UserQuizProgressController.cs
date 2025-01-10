@@ -32,6 +32,16 @@ namespace Ynov.QuizApp.Controllers {
         public IActionResult GetCurrentQuestion(String userId, String quizId) {
             return Ok(_service.GetCurrentQuestion(new Guid(userId), new Guid(quizId)));
         }
+        
+        [HttpPost("answer-question/{userId}/{questionId}", Name = "AnswerQuestion")]
+        [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
+        public IActionResult AnswerQuestion(String userId, String questionId, [FromBody] List<int> selectedOptions) {
+            Boolean response = _service.AnswerQuestion(new Guid(userId), new Guid(questionId), selectedOptions);
+            if (response == false) {
+                return BadRequest();
+            }
+            return Ok(response);
+        }
     }
     
 }

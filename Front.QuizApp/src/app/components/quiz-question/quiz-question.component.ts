@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Question} from '../../business/models/question.model';
 
 @Component({
@@ -10,12 +10,21 @@ import {Question} from '../../business/models/question.model';
 })
 export class QuizQuestionComponent {
     @Input() question!: Question;
+    @Output() selectedOptionsEmitter: EventEmitter<Set<number>> = new EventEmitter<Set<number>>();
     constructor() {}
 
-    protected option: string = '';
+    public selectedOptions: Set<number> = new Set<number>();
 
+    toggleOption(optionIndex: number) {
+        if (this.selectedOptions.has(optionIndex)) {
+            this.selectedOptions.delete(optionIndex);
+        } else {
+            this.selectedOptions.add(optionIndex);
+        }
+        this.selectedOptionsEmitter.emit(this.selectedOptions);
+    }
 
-    selectOption(i: number) {
-        // TODO: Implement this method
+    isSelected(optionIndex: number) {
+        return this.selectedOptions.has(optionIndex);
     }
 }

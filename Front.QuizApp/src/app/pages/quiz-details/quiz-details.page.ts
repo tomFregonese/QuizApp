@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {QuizService} from '../../business/services/quiz.service';
-import {Observable, Subscription} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {Quiz} from '../../business/models/quiz.model';
 import {DatePipe} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -44,6 +44,7 @@ export class QuizDetailsPage implements OnInit{
         options: [],
         questionContent: '',
     };
+    protected selectedOptions: Set<number> = new Set<number>();
     private userId: string = '';
 
     ngOnInit() {
@@ -95,8 +96,15 @@ export class QuizDetailsPage implements OnInit{
         )
     }
 
-    validateQuestion() {
-        // Validate the question
+    submitAnswer(event: Event) {
+        event.preventDefault();
+        this.questionService.postAnswer(this.question.id, Array.from(this.selectedOptions)).subscribe(() => {
+            this.getQuestion(this.userId, this.quiz.id);
+            this.selectedOptions.clear();
+        });
     }
 
+    onSelectionChange(selectedOptions: Set<number>) {
+        this.selectedOptions = selectedOptions;
+    }
 }
