@@ -14,11 +14,11 @@ public class QuestionService : IQuestionService {
         return questions.FirstOrDefault(q => q.Id == questionId) ?? new Question();
     }
     
-    public Question GetAnswersByQuestionId(Guid questionId) {
-        var jsonData = File.ReadAllText(_questionsFilePath);
-        var data = JsonSerializer.Deserialize<List<Question>>(jsonData);
-        var questions = data ?? new List<Question>();
-        return questions.FirstOrDefault(q => q.Id == questionId) ?? new Question();
+    public int GetQuestionIndex(Guid quizId, Guid questionId) {
+        var quizData = File.ReadAllText(_quizzesFilePath);
+        var quizzes = JsonSerializer.Deserialize<List<Quiz>>(quizData) ?? new List<Quiz>();
+        var quiz = quizzes.FirstOrDefault(q => q.Id == quizId);
+        return quiz.QuestionIds.IndexOf(questionId);
     }
 
 }

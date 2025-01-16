@@ -8,6 +8,12 @@ public class UserQuizProgressService : IUserQuizProgressService {
 
     private readonly string _usersQuizProgressFilePath = "DataSet/users-quiz-progress-table.json";
     private readonly string _quizzesFilePath = "DataSet/quizzes-table.json";
+    private readonly string _questionsFilePath = "DataSet/questions-table.json";
+    private readonly IQuestionService _questionService;
+    
+    public UserQuizProgressService(IQuestionService questionService) {
+        _questionService = questionService;
+    }
     
     private List<UserQuizProgress> usersQuizProgresses;
     private UserQuizProgress userQuizProgress;
@@ -129,6 +135,39 @@ public class UserQuizProgressService : IUserQuizProgressService {
         File.WriteAllText(_usersQuizProgressFilePath, JsonSerializer.Serialize(usersQuizProgresses));
 
         return true;
+    }
+    
+    public Answer GetAnswersByQuestionId(Guid userId, Guid questionId) {
+        //Check if the user has answered the question
+        usersQuizProgresses = JsonSerializer.Deserialize<List<UserQuizProgress>>(File.ReadAllText(_usersQuizProgressFilePath));
+        if (usersQuizProgresses == null) {
+            return new Answer();
+        }
+        
+        UserQuizProgress mostRecentUserQuizProgress = null; 
+        
+        for (int i =0; i< usersQuizProgresses.Count; i++) { //Use the UserQuizProgress status to know wich one is the most recent
+            if (mostRecentUserQuizProgress == null || (usersQuizProgresses[i].UserId == userId && usersQuizProgresses[i].QuizId == 
+                    questionId && usersQuizProgresses[i].StartedAt > mostRecentUserQuizProgress.StartedAt)) {
+                mostRecentUserQuizProgress = usersQuizProgresses[i];
+            }
+        }
+        
+        if (mostRecentUserQuizProgress == null) {
+            return new Answer();
+        }
+        
+        int wantedQuestionIndex = _questionService.GetQuestionIndex(mostRecentUserQuizProgress.QuizId, questionId);
+        if (wantedQuestionIndex > (mostRecentUserQuizProgress.GivenAnswers.Count -1)) { 
+            return new Answer(); 
+        }
+
+        //Get the answer of the question
+        var jsonData = File.ReadAllText(_questionsFilePath);
+        var data = JsonSerializer.Deserialize<List<Question>>(jsonData);
+        var questions = data ?? new List<Question>();
+        
+        return new Answer { CorrectOptionIndices = questions.FirstOrDefault(q => q.Id == questionId).CorrectOptionIndices };
     }
 
 }

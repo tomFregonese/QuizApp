@@ -11,5 +11,6 @@ public class UserQuizProgress {
 
 public enum QuizStatus {
     Started, 
-    Completed
+    Completed, 
+    Abandoned 
 }
