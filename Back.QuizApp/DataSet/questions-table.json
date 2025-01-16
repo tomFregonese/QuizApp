@@ -10,5 +10,53 @@
     "QuestionContent": "Another question",
     "Options": ["Option 1", "Option 2", "Option 3", "Option 4"],
     "CorrectOptionIndices": [3]
+  },
+  {
+      "Id": "474e5d2d-db46-4fc0-a45e-60049bce2996",
+      "QuestionContent": "What is the capital of France ?",
+      "Options": ["Paris", "London", "Berlin", "Madrid"],
+      "CorrectOptionIndices": [2]
+  },
+  {
+      "Id": "df3d21c5-4e65-4024-9669-fbce6aa92426",
+      "QuestionContent": "What is the capital of Germany ?",
+      "Options": ["Paris", "London", "Berlin", "Madrid"],
+      "CorrectOptionIndices": [2]
+  },
+  {
+      "Id": "8d9fd98b-bef2-416c-8aba-a637d989079b",
+      "QuestionContent": "What is the capital of Spain ?",
+      "Options": ["Paris", "London", "Berlin", "Madrid"],
+      "CorrectOptionIndices": [3]
+  },
+  {
+      "Id": "c5bbe481-a8fc-468b-984e-950b54b3ca9e",
+      "QuestionContent": "What is the capital of England ?",
+      "Options": ["Paris", "London", "Berlin", "Madrid"],
+      "CorrectOptionIndices": [1]
+  },
+  {
+      "Id": "e8a3f8cc-1e20-4507-9185-81fe51718d10",
+      "QuestionContent": "What is the capital of Italy ?",
+      "Options": ["Paris", "London", "Berlin", "Madrid"],
+      "CorrectOptionIndices": [0]
+  },
+  {
+    "Id": "caf5a9ba-7c42-45b0-b232-ea4c3d37b55f",
+    "QuestionContent": "What is the capital of Belgium ?",
+    "Options": ["Paris", "London", "Berlin", "Madrid"],
+    "CorrectOptionIndices": [2]
+  },
+  {
+    "Id": "d16b8323-f3c0-471a-9dd2-d0f6aabc8e04",
+    "QuestionContent": "Which cars are the most beautiful between those propositions?",
+    "Options": ["Masda Miata", "Audi TT", "BMW M8", "Audi TT Safari", "Porsche 911 Dakar"],
+    "CorrectOptionIndices": [3, 4]
+  },
+  {
+    "Id": "e6602f98-f978-4298-823b-d2396dac6689",
+    "QuestionContent": "What are the possible engines for an Audi TT Mk3?",
+    "Options": ["2.0L TDI ULTRA", "3L V6 TDI", "1.8L TFSI", "2.0L TFSI", "3.2L V6 TFSI", "2.5L TFSI"],
+    "CorrectOptionIndices": [0, 2, 3, 5]
   }
 ]

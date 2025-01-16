@@ -5,6 +5,10 @@
   },
   {
     "Id": "83d82d07-1298-4a4b-9383-00eb985744b0",
-    "Name": "Gestion de projet IT"
+    "Name": "General culture"
+  }, 
+  {
+      "Id": "14ce7baf-90d4-4034-b301-a772032b43a4",
+      "Name": "Cars"
   }
 ]
