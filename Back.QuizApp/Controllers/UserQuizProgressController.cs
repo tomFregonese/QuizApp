@@ -7,7 +7,8 @@ namespace Ynov.QuizApp.Controllers {
     
     [Route("/v1/")]
     [ApiController]
-    public class UserQuizProgressController(IUserQuizProgressService _service) : ControllerBase {
+    public class UserQuizProgressController(IUserQuizProgressService _service, 
+                                            AnswerMapper _answerMapper) : ControllerBase {
         
         [HttpGet("is-quiz-started/{userId}/{quizId}", Name = "IsQuizStarted")]
         [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
@@ -31,6 +32,29 @@ namespace Ynov.QuizApp.Controllers {
         [ProducesResponseType(typeof(QuestionIndexAndIdDTO), StatusCodes.Status200OK)]
         public IActionResult GetCurrentQuestion(String userId, String quizId) {
             return Ok(_service.GetCurrentQuestion(new Guid(userId), new Guid(quizId)));
+        }
+        
+        [HttpPost("answer-question/{userId}/{questionId}", Name = "AnswerQuestion")]
+        [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
+        public IActionResult AnswerQuestion(String userId, String questionId, [FromBody] List<int> selectedOptions) {
+            Boolean response = _service.AnswerQuestion(new Guid(userId), new Guid(questionId), selectedOptions);
+            if (response == false) {
+                return BadRequest();
+            }
+            return Ok(response);
+        }
+        
+        [HttpGet("get-answer/{userId}/{questionId}", Name = "GetAnswersByQuestionId")]
+        [ProducesResponseType(typeof(AnswerDTO), StatusCodes.Status200OK)]
+        public IActionResult GetAnswersByQuestionId(Guid userId, Guid questionId) {
+            AnswerDTO dto = _answerMapper.ToDto(_service.GetAnswersByQuestionId(userId, questionId));
+        
+            if (dto.CorrectOptionIndices == null) {
+                return NotFound();
+            }
+        
+            return Ok(dto);
+        
         }
     }
     

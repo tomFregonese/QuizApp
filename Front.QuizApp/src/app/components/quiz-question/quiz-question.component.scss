@@ -1,0 +1,34 @@
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.option {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px; /* Adjust the width as needed */
+    text-align: center;
+}
+
+.selected {
+    background-color: blue;
+    color: white;
+}
+
+.option.correct-selected {
+    background-color: green;
+    color: white;
+}
+
+.option.incorrect-selected {
+    background-color: red;
+    color: white;
+}
+
+.option.correct-not-selected {
+    background-color: lightgreen;
+    color: white;
+}

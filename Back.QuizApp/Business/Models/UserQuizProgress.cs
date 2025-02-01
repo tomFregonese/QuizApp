@@ -6,10 +6,11 @@ public class UserQuizProgress {
     public DateTime StartedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public QuizStatus Status { get; set; }
-    public List<int> GivenAnswers { get; set; } = new List<int>();
+    public List<List<int>> GivenAnswers { get; set; } = new List<List<int>>();
 }
 
 public enum QuizStatus {
     Started, 
-    Completed
+    Completed, 
+    Abandoned 
 }

@@ -10,11 +10,20 @@
   },
   {
     "Id": "ca655c54-0d8b-4ff1-9363-46f269bc5f72",
-    "Name": "Dev FullStack M2",
+    "Name": "Countries Capitals",
     "CategoryId": "83d82d07-1298-4a4b-9383-00eb985744b0",
-    "Description": "ASP.NET Core Web API",
+    "Description": "Questions about general culture.",
     "Difficulty": 3,
     "CreationDate": "2024-11-25T11:23:34", 
-    "QuestionIds": []
+    "QuestionIds": ["474e5d2d-db46-4fc0-a45e-60049bce2996", "df3d21c5-4e65-4024-9669-fbce6aa92426", "8d9fd98b-bef2-416c-8aba-a637d989079b", "c5bbe481-a8fc-468b-984e-950b54b3ca9e", "e8a3f8cc-1e20-4507-9185-81fe51718d10", "caf5a9ba-7c42-45b0-b232-ea4c3d37b55f"]
+  }, 
+  {
+      "Id": "ca655c54-0d8b-4ff1-9363-46f269bc5f73",
+      "Name": "Cars",
+      "CategoryId": "14ce7baf-90d4-4034-b301-a772032b43a4",
+      "Description": "A quiz about cars",
+      "Difficulty": 2,
+      "CreationDate": "2025-01-14T08:16:34", 
+      "QuestionIds": ["d16b8323-f3c0-471a-9dd2-d0f6aabc8e04", "e6602f98-f978-4298-823b-d2396dac6689"]
   }
 ]

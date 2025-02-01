@@ -4,9 +4,9 @@ using Ynov.QuizApp.Controllers.DTOs;
 namespace Ynov.QuizApp.Controllers.Mappers;
 
 public class AnswerMapper {
-    public AnswerDTO ToDto(Question question) {
+    public AnswerDTO ToDto(Answer answer) {
         return new AnswerDTO() {
-            CorrectOptionIndices = question.CorrectOptionIndices,
+            CorrectOptionIndices = answer.CorrectOptionIndices,
         }; 
     }
 }

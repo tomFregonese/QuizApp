@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {QuizService} from '../../business/services/quiz.service';
-import {Observable, Subscription} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {Quiz} from '../../business/models/quiz.model';
 import {DatePipe} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -24,6 +24,7 @@ import {UserHeaderComponent} from '../../components/user-header/user-header.comp
 })
 
 export class QuizDetailsPage implements OnInit{
+    @ViewChild(QuizQuestionComponent) quizQuestionComponent!: QuizQuestionComponent;
 
     constructor (private readonly questionService: QuestionService,
                  private readonly quizService: QuizService,
@@ -44,6 +45,7 @@ export class QuizDetailsPage implements OnInit{
         options: [],
         questionContent: '',
     };
+    protected selectedOptions: Set<number> = new Set<number>();
     private userId: string = '';
 
     ngOnInit() {
@@ -89,14 +91,32 @@ export class QuizDetailsPage implements OnInit{
                 this.currentQuestionIndex = questionIndexAndId.currentQuestionIndex;
                 this.questionService.getQuestionById(questionIndexAndId.questionId).subscribe((question: Question) => {
                     this.question = question;
-                    console.log(this.question)
                 });
             }
         )
     }
 
-    validateQuestion() {
-        // Validate the question
+    submitAnswer(event: Event) {
+        event.preventDefault();
+        this.questionService.postAnswer(this.question.id, Array.from(this.selectedOptions)).subscribe(() => {
+            this.displayAnswer();
+            setTimeout(() => {
+                this.getQuestion(this.userId, this.quiz.id);
+                this.selectedOptions.clear();
+                this.quizQuestionComponent.hideCorrectOption();
+            }, 2000);
+        });
+    }
+
+    onSelectionChange(selectedOptions: Set<number>) {
+        this.selectedOptions = selectedOptions;
+    }
+
+    displayAnswer() {
+        this.questionService.getAnswerByQuestionId(this.question).subscribe(value => {
+            this.question = value;
+            this.quizQuestionComponent.displayCorrectOption();
+        });
     }
 
 }
