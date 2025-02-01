@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {QuizService} from '../../business/services/quiz.service';
 import {Subscription} from 'rxjs';
 import {Quiz} from '../../business/models/quiz.model';
@@ -24,6 +24,7 @@ import {UserHeaderComponent} from '../../components/user-header/user-header.comp
 })
 
 export class QuizDetailsPage implements OnInit{
+    @ViewChild(QuizQuestionComponent) quizQuestionComponent!: QuizQuestionComponent;
 
     constructor (private readonly questionService: QuestionService,
                  private readonly quizService: QuizService,
@@ -90,7 +91,6 @@ export class QuizDetailsPage implements OnInit{
                 this.currentQuestionIndex = questionIndexAndId.currentQuestionIndex;
                 this.questionService.getQuestionById(questionIndexAndId.questionId).subscribe((question: Question) => {
                     this.question = question;
-                    console.log(this.question)
                 });
             }
         )
@@ -99,12 +99,24 @@ export class QuizDetailsPage implements OnInit{
     submitAnswer(event: Event) {
         event.preventDefault();
         this.questionService.postAnswer(this.question.id, Array.from(this.selectedOptions)).subscribe(() => {
-            this.getQuestion(this.userId, this.quiz.id);
-            this.selectedOptions.clear();
+            this.displayAnswer();
+            setTimeout(() => {
+                this.getQuestion(this.userId, this.quiz.id);
+                this.selectedOptions.clear();
+                this.quizQuestionComponent.hideCorrectOption();
+            }, 2000);
         });
     }
 
     onSelectionChange(selectedOptions: Set<number>) {
         this.selectedOptions = selectedOptions;
     }
+
+    displayAnswer() {
+        this.questionService.getAnswerByQuestionId(this.question).subscribe(value => {
+            this.question = value;
+            this.quizQuestionComponent.displayCorrectOption();
+        });
+    }
+
 }

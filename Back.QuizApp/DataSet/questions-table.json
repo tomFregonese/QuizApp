@@ -15,7 +15,7 @@
       "Id": "474e5d2d-db46-4fc0-a45e-60049bce2996",
       "QuestionContent": "What is the capital of France ?",
       "Options": ["Paris", "London", "Berlin", "Madrid"],
-      "CorrectOptionIndices": [2]
+      "CorrectOptionIndices": [0]
   },
   {
       "Id": "df3d21c5-4e65-4024-9669-fbce6aa92426",
@@ -38,19 +38,19 @@
   {
       "Id": "e8a3f8cc-1e20-4507-9185-81fe51718d10",
       "QuestionContent": "What is the capital of Italy ?",
-      "Options": ["Paris", "London", "Berlin", "Madrid"],
-      "CorrectOptionIndices": [0]
+      "Options": ["Brussels", "New York", "Monaco", "Roma"],
+      "CorrectOptionIndices": [3]
   },
   {
     "Id": "caf5a9ba-7c42-45b0-b232-ea4c3d37b55f",
     "QuestionContent": "What is the capital of Belgium ?",
-    "Options": ["Paris", "London", "Berlin", "Madrid"],
-    "CorrectOptionIndices": [2]
+    "Options": ["Brussels", "New York", "Monaco", "Roma"],
+    "CorrectOptionIndices": [0]
   },
   {
     "Id": "d16b8323-f3c0-471a-9dd2-d0f6aabc8e04",
     "QuestionContent": "Which cars are the most beautiful between those propositions?",
-    "Options": ["Masda Miata", "Audi TT", "BMW M8", "Audi TT Safari", "Porsche 911 Dakar"],
+    "Options": ["Mazda Miata", "Audi TT", "BMW M8", "Audi TT Safari", "Porsche 911 Dakar"],
     "CorrectOptionIndices": [3, 4]
   },
   {

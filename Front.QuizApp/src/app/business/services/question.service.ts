@@ -9,6 +9,7 @@ import {QuestionIndexAndId} from '../models/questionIndexAndId.model';
 import {QuestionIndexAndIdDto} from '../dtos/questionIndexAndId.dto';
 import {QuestionIndexAndIdMapper} from '../mappers/questionIndexAndId.mapper';
 import {UserService} from './user.service';
+import {AnswerDto} from '../dtos/answer.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -41,13 +42,21 @@ export class QuestionService {
     }
 
     postAnswer(questionId: string, selectedOptions: number[]): Observable<Boolean> {
-    return this.userService.getUserId().pipe(switchMap(
-        userId => this.httpClient.post<Boolean>(this.questionApiUrl + `answer-question/${userId}/${questionId}`, selectedOptions)
-        ));
+        return this.userService.getUserId().pipe(switchMap(userId =>
+                this.httpClient.post<Boolean>(this.questionApiUrl + `answer-question/${userId}/${questionId}`, selectedOptions)
+            ));
     }
 
-    getAnswerByQuestionId(userId: string, questionId: string) {
-        //TODO implement this method
+    getAnswerByQuestionId(originalQuestion:Question) {
+        return this.userService.getUserId().pipe(
+            switchMap(userId =>
+                this.httpClient.get<AnswerDto>(this.questionApiUrl + `get-answer/${userId}/${originalQuestion.id}`).pipe(
+                        map((answerDto: AnswerDto) => {
+                            return this.answerMapper.mapAnswerFromApiToModel(originalQuestion, answerDto);
+                        })
+                )
+            )
+        )
     }
 
 }

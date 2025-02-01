@@ -13,7 +13,22 @@
     text-align: center;
 }
 
-.option.selected {
+.selected {
     background-color: blue;
+    color: white;
+}
+
+.option.correct-selected {
+    background-color: green;
+    color: white;
+}
+
+.option.incorrect-selected {
+    background-color: red;
+    color: white;
+}
+
+.option.correct-not-selected {
+    background-color: lightgreen;
     color: white;
 }
