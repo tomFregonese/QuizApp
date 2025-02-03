@@ -10,9 +10,11 @@ public class UserQuizProgressService : IUserQuizProgressService {
     private readonly string _quizzesFilePath = "DataSet/quizzes-table.json";
     private readonly string _questionsFilePath = "DataSet/questions-table.json";
     private readonly IQuestionService _questionService;
+    private readonly IQuizService _quizService;
     
-    public UserQuizProgressService(IQuestionService questionService) {
+    public UserQuizProgressService(IQuestionService questionService, IQuizService quizService) {
         _questionService = questionService;
+        _quizService = quizService; 
     }
     
     private List<UserQuizProgress> usersQuizProgresses;
@@ -21,24 +23,17 @@ public class UserQuizProgressService : IUserQuizProgressService {
     private Quiz quiz;
 
     public Boolean IsQuizCompleted(Guid userId, Guid quizId) {
-        usersQuizProgresses = JsonSerializer.Deserialize<List<UserQuizProgress>>(File.ReadAllText(_usersQuizProgressFilePath));
+        List<UserQuizProgress> usersQuizProgresses = JsonSerializer.Deserialize<List<UserQuizProgress>>(File.ReadAllText(_usersQuizProgressFilePath));
         if (usersQuizProgresses == null) {
             return false;
         }
-        userQuizProgress = usersQuizProgresses.FirstOrDefault(uqp => uqp.UserId == userId && uqp.QuizId == quizId);
         
-        if (userQuizProgress == null) {
+        UserQuizProgress mostRecentUserQuizProgress = usersQuizProgresses.Where(uqp => uqp.UserId == userId && uqp.QuizId == quizId).OrderByDescending(uqp => uqp.StartedAt).FirstOrDefault();
+        if (mostRecentUserQuizProgress == null) {
             return false;
         }
-        
-        quizzes = JsonSerializer.Deserialize<List<Quiz>>(File.ReadAllText(_quizzesFilePath));
-        quiz = quizzes.FirstOrDefault(q => q.Id == quizId);
-        
-        if (userQuizProgress.GivenAnswers.Count < quiz.QuestionIds.Count) {
-            return false;
-        }
-        
-        return true;
+
+        return mostRecentUserQuizProgress.Status != QuizStatus.Started;
     }
     
     public Boolean IsQuizStarted(Guid userId, Guid quizId) {
@@ -46,9 +41,9 @@ public class UserQuizProgressService : IUserQuizProgressService {
         if (usersQuizProgresses == null) {
             return false;
         }
-        userQuizProgress = usersQuizProgresses.FirstOrDefault(uqp => uqp.UserId == userId && uqp.QuizId == quizId);
         
-        if (userQuizProgress == null) {
+        UserQuizProgress mostRecentUserQuizProgress = usersQuizProgresses.Where(uqp => uqp.UserId == userId && uqp.QuizId == quizId).OrderByDescending(uqp => uqp.StartedAt).FirstOrDefault();
+        if (mostRecentUserQuizProgress == null || mostRecentUserQuizProgress.Status != QuizStatus.Started) {
             return false;
         }
         
@@ -102,36 +97,36 @@ public class UserQuizProgressService : IUserQuizProgressService {
         };
     }
     
+    public Boolean IsItTheLastQuestion(UserQuizProgress uqp) {
+        quiz = _quizService.GetQuizById(uqp.QuizId);
+        return uqp.GivenAnswers.Count == quiz.QuestionIds.Count - 1;
+    }
+    
     public Boolean AnswerQuestion(Guid userId, Guid questionId, List<int> selectedOptions) {
         usersQuizProgresses = JsonSerializer.Deserialize<List<UserQuizProgress>>(File.ReadAllText(_usersQuizProgressFilePath));
         if (usersQuizProgresses == null) {
             return false;
         }
 
-        UserQuizProgress mostRecentUserQuizProgress = null; 
-        int mostRecentUserQuizProgressIndex = -1;
-        
-        for (int i =0; i< usersQuizProgresses.Count; i++) {
-            if (mostRecentUserQuizProgress == null || (usersQuizProgresses[i].UserId == userId && usersQuizProgresses[i].QuizId == 
-                questionId && usersQuizProgresses[i].StartedAt > mostRecentUserQuizProgress.StartedAt)) {
-                mostRecentUserQuizProgress = usersQuizProgresses[i];
-                mostRecentUserQuizProgressIndex = i;
-            }
-        }
-        
-        if (mostRecentUserQuizProgress == null) {
+        UserQuizProgress currentQuizProgress = usersQuizProgresses.FirstOrDefault(uqp => uqp.UserId == userId && uqp.Status == QuizStatus.Started);
+        if (currentQuizProgress == null) {
             return false;
         }
         
-        Boolean isItThisQuestionTheUserHasToAnswerTo = GetCurrentQuestion(userId, mostRecentUserQuizProgress.QuizId).QuestionId == questionId;
+        int currentQuizProgressIndex = usersQuizProgresses.IndexOf(currentQuizProgress);
         
+        Boolean isItThisQuestionTheUserHasToAnswerTo = GetCurrentQuestion(userId, currentQuizProgress.QuizId).QuestionId == questionId;
         if (!isItThisQuestionTheUserHasToAnswerTo) {
             return false;
         }
         
-        mostRecentUserQuizProgress.GivenAnswers.Add(selectedOptions);
-        mostRecentUserQuizProgress.UpdatedAt = DateTime.Now;
-        usersQuizProgresses[mostRecentUserQuizProgressIndex] = mostRecentUserQuizProgress; 
+        Boolean isItTheLastQuestion;
+        isItTheLastQuestion = IsItTheLastQuestion(currentQuizProgress);
+        
+        currentQuizProgress.GivenAnswers.Add(selectedOptions);
+        currentQuizProgress.UpdatedAt = DateTime.Now;
+        currentQuizProgress.Status = isItTheLastQuestion ? QuizStatus.Completed : QuizStatus.Started;
+        usersQuizProgresses[currentQuizProgressIndex] = currentQuizProgress; 
         File.WriteAllText(_usersQuizProgressFilePath, JsonSerializer.Serialize(usersQuizProgresses));
 
         return true;
@@ -146,7 +141,7 @@ public class UserQuizProgressService : IUserQuizProgressService {
         
         UserQuizProgress mostRecentUserQuizProgress = null; 
         
-        for (int i =0; i< usersQuizProgresses.Count; i++) { //Use the UserQuizProgress status to know wich one is the most recent
+        for (int i =0; i< usersQuizProgresses.Count; i++) { //Use the UserQuizProgress status to know which one is the most recent
             if (mostRecentUserQuizProgress == null || (usersQuizProgresses[i].UserId == userId && usersQuizProgresses[i].QuizId == 
                     questionId && usersQuizProgresses[i].StartedAt > mostRecentUserQuizProgress.StartedAt)) {
                 mostRecentUserQuizProgress = usersQuizProgresses[i];
@@ -168,6 +163,22 @@ public class UserQuizProgressService : IUserQuizProgressService {
         var questions = data ?? new List<Question>();
         
         return new Answer { CorrectOptionIndices = questions.FirstOrDefault(q => q.Id == questionId).CorrectOptionIndices };
+    }
+
+    public void CloseUnfinishedQuizzes() {
+        List<UserQuizProgress> usersQuizProgresses = JsonSerializer.Deserialize<List<UserQuizProgress>>(File.ReadAllText(_usersQuizProgressFilePath));
+        if (usersQuizProgresses == null) {
+            return;
+        }
+
+        foreach (var userQuizProgress in usersQuizProgresses) {
+            if (userQuizProgress.Status == QuizStatus.Started && (DateTime.Now - userQuizProgress.UpdatedAt).TotalMinutes > 15) {
+                userQuizProgress.Status = QuizStatus.Abandoned;
+                Console.WriteLine("Closed unfinished quiz for user: " + userQuizProgress.UserId);
+            }
+        }
+        
+        File.WriteAllText(_usersQuizProgressFilePath, JsonSerializer.Serialize(usersQuizProgresses));
     }
 
 }

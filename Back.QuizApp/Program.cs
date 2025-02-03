@@ -24,6 +24,7 @@ builder.Services.AddScoped <IUserService, UserService>();
 builder.Services.AddScoped<UserMapper>();
 
 builder.Services.AddScoped <IUserQuizProgressService, UserQuizProgressService>();
+builder.Services.AddSingleton<TimerService>();
 
 var app = builder.Build();
 
@@ -41,5 +42,7 @@ app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader());
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.Services.GetRequiredService<TimerService>();
 
 app.Run();
