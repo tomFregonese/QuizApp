@@ -98,7 +98,7 @@ export class QuizDetailsPage implements OnInit{
 
     submitAnswer(event: Event) {
         event.preventDefault();
-        this.questionService.postAnswer(this.question.id, Array.from(this.selectedOptions)).subscribe(() => {
+        this.questionService.postAnswer(this.quiz.id, this.question.id, Array.from(this.selectedOptions)).subscribe(() => {
             this.displayAnswer();
             setTimeout(() => {
                 this.getQuestion(this.userId, this.quiz.id);
@@ -113,7 +113,7 @@ export class QuizDetailsPage implements OnInit{
     }
 
     displayAnswer() {
-        this.questionService.getAnswerByQuestionId(this.question).subscribe(value => {
+        this.questionService.getAnswerByQuestionId(this.quiz.id, this.question).subscribe(value => {
             this.question = value;
             this.quizQuestionComponent.displayCorrectOption();
         });

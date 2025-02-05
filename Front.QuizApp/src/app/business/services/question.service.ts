@@ -41,16 +41,16 @@ export class QuestionService {
             );
     }
 
-    postAnswer(questionId: string, selectedOptions: number[]): Observable<Boolean> {
+    postAnswer(quizId: string, questionId: string, selectedOptions: number[]): Observable<Boolean> {
         return this.userService.getUserId().pipe(switchMap(userId =>
-                this.httpClient.post<Boolean>(this.questionApiUrl + `answer-question/${userId}/${questionId}`, selectedOptions)
+                this.httpClient.post<Boolean>(this.questionApiUrl + `answer-question/${userId}/${quizId}/${questionId}`, selectedOptions)
             ));
     }
 
-    getAnswerByQuestionId(originalQuestion:Question) {
+    getAnswerByQuestionId(quizId: string, originalQuestion:Question) {
         return this.userService.getUserId().pipe(
             switchMap(userId =>
-                this.httpClient.get<AnswerDto>(this.questionApiUrl + `get-answer/${userId}/${originalQuestion.id}`).pipe(
+                this.httpClient.get<AnswerDto>(this.questionApiUrl + `get-answer/${userId}/${quizId}/${originalQuestion.id}`).pipe(
                         map((answerDto: AnswerDto) => {
                             return this.answerMapper.mapAnswerFromApiToModel(originalQuestion, answerDto);
                         })
