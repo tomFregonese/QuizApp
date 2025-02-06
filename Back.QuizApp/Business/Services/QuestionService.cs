@@ -20,5 +20,10 @@ public class QuestionService : IQuestionService {
         var quiz = quizzes.FirstOrDefault(q => q.Id == quizId);
         return quiz.QuestionIds.IndexOf(questionId);
     }
+    
+    public List<Question> GetAllQuestions() {
+        var questionData = File.ReadAllText(_questionsFilePath);
+        return JsonSerializer.Deserialize<List<Question>>(questionData) ?? new List<Question>();
+    }
 
 }

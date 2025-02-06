@@ -10,22 +10,20 @@ namespace Ynov.QuizApp.Controllers {
     public class UserQuizProgressController(IUserQuizProgressService _service, 
                                             AnswerMapper _answerMapper) : ControllerBase {
         
-        [HttpGet("is-quiz-started/{userId}/{quizId}", Name = "IsQuizStarted")]
-        [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
-        public IActionResult IsQuizStarted(Guid userId, Guid quizId) {
-            return Ok(_service.IsQuizStarted(userId, quizId));
-        }
-        
-        [HttpGet("is-quiz-completed/{userId}/{quizId}", Name = "IsQuizCompleted")]
-        [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
-        public IActionResult IsQuizCompleted(Guid userId, Guid quizId) {
-            return Ok(_service.IsQuizCompleted(userId, quizId));
+        [HttpGet("get-quiz-status/{userId}/{quizId}", Name = "GetQuizStatus")]
+        [ProducesResponseType(typeof(QuizStatus), StatusCodes.Status200OK)]
+        public IActionResult GetQuizStatus(Guid userId, Guid quizId) {
+            return Ok(_service.GetQuizStatus(userId, quizId));
         }
         
         [HttpPost("start-quiz/{userId}/{quizId}", Name = "StartAQuiz")]
         [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
         public IActionResult StartAQuiz(String userId, String quizId) {
-            return Ok(_service.StartAQuiz(new Guid(userId), new Guid(quizId)));
+            bool result = _service.StartAQuiz(new Guid(userId), new Guid(quizId));
+            if (!result) {
+                return BadRequest();
+            }
+            return Ok();
         }
         
         [HttpGet("get-current-question/{userId}/{quizId}", Name = "GetCurrentQuestion")]
@@ -34,20 +32,22 @@ namespace Ynov.QuizApp.Controllers {
             return Ok(_service.GetCurrentQuestion(new Guid(userId), new Guid(quizId)));
         }
         
-        [HttpPost("answer-question/{userId}/{questionId}", Name = "AnswerQuestion")]
+        [HttpPost("answer-question/{userId}/{quizId}/{questionId}", Name = "AnswerQuestion")]
         [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
-        public IActionResult AnswerQuestion(String userId, String questionId, [FromBody] List<int> selectedOptions) {
-            Boolean response = _service.AnswerQuestion(new Guid(userId), new Guid(questionId), selectedOptions);
+        public IActionResult AnswerQuestion(String userId, String quizId, String questionId, [FromBody] List<int> 
+            selectedOptions) {
+            Boolean response = _service.AnswerQuestion(new Guid(userId), new Guid(quizId), 
+                new Guid(questionId), selectedOptions);
             if (response == false) {
                 return BadRequest();
             }
             return Ok(response);
         }
         
-        [HttpGet("get-answer/{userId}/{questionId}", Name = "GetAnswersByQuestionId")]
+        [HttpGet("get-answer/{userId}/{quizId}/{questionId}", Name = "GetAnswersByQuestionId")]
         [ProducesResponseType(typeof(AnswerDTO), StatusCodes.Status200OK)]
-        public IActionResult GetAnswersByQuestionId(Guid userId, Guid questionId) {
-            AnswerDTO dto = _answerMapper.ToDto(_service.GetAnswersByQuestionId(userId, questionId));
+        public IActionResult GetAnswersByQuestionId(Guid userId, Guid quizId, Guid questionId) {
+            AnswerDTO dto = _answerMapper.ToDto(_service.GetAnswersByQuestionId(userId, quizId, questionId));
         
             if (dto.CorrectOptionIndices == null) {
                 return NotFound();

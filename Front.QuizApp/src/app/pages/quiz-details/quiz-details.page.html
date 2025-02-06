@@ -1,4 +1,4 @@
-@if (quizStarted) {
+@if (quizStatus == QuizStatus.Started) {
     <div class="quiz-details">
         <div class="quiz-header">
             <h1>{{ quiz?.name }}</h1>
@@ -7,6 +7,19 @@
             <app-quiz-question [question]="question" (selectedOptionsEmitter)="onSelectionChange($event)" />
             <button type="submit" (click)="submitAnswer($event)">Validate</button>
         </form>
+    </div>
+} @else if (quizStatus == QuizStatus.Completed && displayRecap) {
+    <app-user-header/>
+    <div class="quiz-details">
+        <div class="quiz-header">
+            <h1>{{ quiz?.name }}</h1>
+        </div>
+        <div class="quiz-body">
+            <p class="quiz-description">Quiz completed!</p>
+<!--            <p class="quiz-difficulty">Your score: {{ score }}/{{ quiz?.questions.length }}</p>-->
+            <button  (click)="navigateHome()">Return home</button>
+            <button (click)="displayQuizDetails()">Return to quiz details</button>
+        </div>
     </div>
 } @else {
     <app-user-header/>
