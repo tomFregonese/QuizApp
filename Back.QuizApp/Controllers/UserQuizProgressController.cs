@@ -10,22 +10,20 @@ namespace Ynov.QuizApp.Controllers {
     public class UserQuizProgressController(IUserQuizProgressService _service, 
                                             AnswerMapper _answerMapper) : ControllerBase {
         
-        [HttpGet("is-quiz-started/{userId}/{quizId}", Name = "IsQuizStarted")]
-        [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
-        public IActionResult IsQuizStarted(Guid userId, Guid quizId) {
-            return Ok(_service.IsQuizStarted(userId, quizId));
-        }
-        
-        [HttpGet("is-quiz-completed/{userId}/{quizId}", Name = "IsQuizCompleted")]
-        [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
-        public IActionResult IsQuizCompleted(Guid userId, Guid quizId) {
-            return Ok(_service.IsQuizCompleted(userId, quizId));
+        [HttpGet("get-quiz-status/{userId}/{quizId}", Name = "GetQuizStatus")]
+        [ProducesResponseType(typeof(QuizStatus), StatusCodes.Status200OK)]
+        public IActionResult GetQuizStatus(Guid userId, Guid quizId) {
+            return Ok(_service.GetQuizStatus(userId, quizId));
         }
         
         [HttpPost("start-quiz/{userId}/{quizId}", Name = "StartAQuiz")]
         [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
         public IActionResult StartAQuiz(String userId, String quizId) {
-            return Ok(_service.StartAQuiz(new Guid(userId), new Guid(quizId)));
+            bool result = _service.StartAQuiz(new Guid(userId), new Guid(quizId));
+            if (!result) {
+                return BadRequest();
+            }
+            return Ok();
         }
         
         [HttpGet("get-current-question/{userId}/{quizId}", Name = "GetCurrentQuestion")]

@@ -44,19 +44,10 @@ public class UserQuizProgressService : IUserQuizProgressService {
         }
         return _usersQuizProgresses.Where(uqp => uqp.UserId == userId && uqp.QuizId == quizId).OrderByDescending(uqp => uqp.StartedAt).FirstOrDefault();
     }
-
-    public Boolean IsQuizCompleted(Guid userId, Guid quizId) {
-        UserQuizProgress? mostRecentUserQuizProgress = GetMostRecentUQP(userId, quizId);
-        if (mostRecentUserQuizProgress == null) {
-            return false;
-        }
-
-        return mostRecentUserQuizProgress.Status != QuizStatus.Started;
-    }
     
-    public Boolean IsQuizStarted(Guid userId, Guid quizId) {
-        UserQuizProgress? mostRecentUserQuizProgress = GetMostRecentUQP(userId, quizId);
-        return mostRecentUserQuizProgress?.Status == QuizStatus.Started;
+    public QuizStatus GetQuizStatus(Guid userId, Guid quizId) {
+        _userQuizProgress = GetMostRecentUQP(userId, quizId);
+        return _userQuizProgress?.Status ?? QuizStatus.Abandoned; //If the user has never started the quiz, it is considered as abandoned
     }
     
     public Boolean StartAQuiz(Guid userId, Guid quizId) {

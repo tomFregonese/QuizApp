@@ -5,6 +5,7 @@ import {map, Observable} from 'rxjs';
 import {Quiz} from '../models/quiz.model';
 import {QuizDto} from '../dtos/quiz.dto';
 import {environment} from '../../environment/environment';
+import {QuizStatus} from '../models/userQuizProgressStatus.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,13 +35,9 @@ export class QuizService {
         );
     }
 
-    isQuizStarted(userId :string, quizId: string): Observable<boolean> {
-        return this.httpClient.get<boolean>(this.quizApiUrl + `is-quiz-started/${userId}/${quizId}/`)
-            .pipe(
-                map((started: boolean) => {
-                    return started;
-                })
-            );
+    getQuizStatus(userId: string, quizId: string): Observable<QuizStatus> {
+        return this.httpClient.get<QuizStatus>(this.quizApiUrl + `get-quiz-status/${userId}/${quizId}`)
+            .pipe(map((status: QuizStatus) => status));
     }
 
     startQuiz(userId: string, quizId: string) {

@@ -10,6 +10,7 @@ import {Question} from '../../business/models/question.model';
 import {QuestionService} from '../../business/services/question.service';
 import {UserService} from '../../business/services/user.service';
 import {UserHeaderComponent} from '../../components/user-header/user-header.component';
+import {QuizStatus} from '../../business/models/userQuizProgressStatus.model';
 
 @Component({
     selector: 'app-quiz-details',
@@ -36,7 +37,8 @@ export class QuizDetailsPage implements OnInit{
     private subscriptions: Subscription = new Subscription();
     public quiz!: Quiz;
     protected categoryName: string = '';
-    protected quizStarted: boolean = false;
+    protected quizStatus: QuizStatus = QuizStatus.notInitialized;
+    protected displayRecap: boolean = false;
     protected currentQuestionIndex: number = 0;
     protected totalNumberOfQuestions: number = 0;
     protected question: Question = {
@@ -47,16 +49,17 @@ export class QuizDetailsPage implements OnInit{
     };
     protected selectedOptions: Set<number> = new Set<number>();
     private userId: string = '';
+    protected readonly QuizStatus = QuizStatus;
 
     ngOnInit() {
         const quizId = this.route.snapshot.paramMap.get('id');
         this.subscriptions.add(
             this.userService.getUserId().subscribe((userId: string) =>{
                 this.userId = userId;
-                this.quizService.isQuizStarted(userId, quizId!).subscribe((started: boolean) => {
-                    this.quizStarted = started;
-                    if (started) this.getQuestion(this.userId, quizId!);
-                })
+                this.quizService.getQuizStatus(userId, quizId!).subscribe((status: QuizStatus) => {
+                    this.quizStatus = status;
+                    if (this.quizStatus == QuizStatus.Started) this.getQuestion(this.userId, quizId!);
+                });
             } )
         );
         this.subscriptions.add(
@@ -78,7 +81,7 @@ export class QuizDetailsPage implements OnInit{
         }
         this.subscriptions.add(
             this.quizService.startQuiz(this.userId, this.quiz.id).subscribe(() => {
-                this.quizStarted = true;
+                this.quizStatus = QuizStatus.Started;
                 this.getQuestion(this.userId, this.quiz.id);
             })
         );
@@ -101,7 +104,11 @@ export class QuizDetailsPage implements OnInit{
         this.questionService.postAnswer(this.quiz.id, this.question.id, Array.from(this.selectedOptions)).subscribe(() => {
             this.displayAnswer();
             setTimeout(() => {
-                this.getQuestion(this.userId, this.quiz.id);
+                this.quizService.getQuizStatus(this.userId, this.quiz.id).subscribe((status: QuizStatus) => {
+                    if (status == QuizStatus.Started) this.getQuestion(this.userId, this.quiz.id);
+                    if (status == QuizStatus.Completed) this.displayQuizResults();
+                    if (status == QuizStatus.Abandoned) this.displayAbandonedQuizError();
+                });
                 this.selectedOptions.clear();
                 this.quizQuestionComponent.hideCorrectOption();
             }, 2000);
@@ -119,4 +126,20 @@ export class QuizDetailsPage implements OnInit{
         });
     }
 
+    displayQuizResults() {
+        this.quizStatus = QuizStatus.Completed;
+        this.displayRecap = true;
+    }
+
+    displayAbandonedQuizError() {
+        //this.dialog.open(ErrorDialogComponent, {data: {message: 'You have been inactive for too long. The quiz has been abandoned. Please start again.'}});
+    }
+
+    navigateHome() {
+        this.router.navigate(['/']);
+    }
+
+    displayQuizDetails() {
+        this.quizStatus = QuizStatus.notInitialized;
+    }
 }
